@@ -1,0 +1,12 @@
+// Mínima para arrancar. AJUSTA con tu gramática real.
+// Acepta un bloque begin ... end con cero o más asignaciones "x <- y"
+?start: program
+program: "begin" stmt* "end"
+
+?stmt: assign
+assign: NAME "<-" (NUMBER | NAME)       -> assign_stmt
+
+%import common.CNAME -> NAME
+%import common.INT   -> NUMBER
+%import common.WS
+%ignore WS

@@ -1,0 +1,20 @@
+# Dependencias mínimas para correr la API y preparar el proyecto
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+
+# Tecnologías previstas en el proyecto (sin implementar lógica aquí)
+lark              # parser de gramáticas (Lark)
+supabase          # cliente para Supabase
+
+# Calidad de código (opcional, útil en equipo)
+ruff
+black
+isort
+mypy
+
+# Pruebas (opcional)
+pytest
+httpx
+pytest-cov
