@@ -1,70 +1,168 @@
-# Analizador de Algoritmos — Backend (Base mínima de configuración)
+# Analizador de Algoritmos — Backend (FastAPI)
 
-> Esta plantilla contiene **solo lo necesario** para que el proyecto arranque en FastAPI
-> y quede listo para desarrollo colaborativo. No incluye lógica de negocio; únicamente
-> estructura, configuración, dependencias y comentarios en español sobre qué va en cada carpeta.
+> Proyecto base para análisis y experimentación algorítmica con **FastAPI**.  
+> Incluye configuración mínima, entorno virtual, variables de entorno, dependencias y estructura modular lista para extender.
 
-## 1) Requisitos previos
-- Python 3.10+
-- Git
+---
 
-## 2) Instalación (desarrollo)
+## ⚙️ 1) Requisitos previos
+
+Antes de comenzar, asegúrate de tener instalado:
+
+- **Python 3.10+**
+- **Git**
+- (Opcional pero recomendado) **VS Code** con la extensión _Python_ y _Pylance_
+- (Opcional) **Postman** o **cURL** para probar los endpoints
+
+---
+
+## 🚀 2) Instalación y configuración del entorno
+
+### Linux / macOS / Git Bash
 
 ```bash
-# Crear y activar entorno virtual (bash)
+# Clonar el repositorio
+git clone <URL_DEL_REPO>
+cd algorithm-analysis
+
+# Crear entorno virtual
 python -m venv .venv
-source .venv/bin/activate
 
-# En Windows PowerShell:
-# python -m venv .venv
-# .venv\Scripts\Activate.ps1
+# Activar entorno
+source .venv/Scripts/activate  # en Git Bash (Windows)
+# o
+source .venv/bin/activate      # en Linux/Mac
 
+# Desactivar entorno
+deactivate
+
+# Actualizar pip e instalar dependencias
 pip install --upgrade pip
 pip install -r requirements.txt
+
+# Crear archivo de entorno
 cp .env.example .env
 ```
 
-## 3) Ejecutar servidor
+### Windows PowerShell
+
+```bash
+# Clonar el repositorio
+git clone <URL_DEL_REPO>
+cd algorithm-analysis
+
+# Crear y activar entorno virtual
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+
+# Instalar dependencias
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Copiar archivo de entorno
+copy .env.example .env
+```
+
+---
+
+## ▶️ 3) Ejecutar el servidor FastAPI
+
+Asegúrate de estar en la raíz del proyecto (donde está `app/` y `.venv`).
+
+### Linux / Git Bash
 
 ```bash
 # Asegúrate de estar en el raíz del proyecto
 export PYTHONPATH=.
 uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-
-# Windows PowerShell:
-# setx PYTHONPATH "."  (ejecútalo una vez y abre nueva terminal)
-# uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-Abre: http://localhost:8000/docs
+### Windows PowerShell
 
-## 4) Estructura (mínima)
-
-```
-app/
-  main.py        # Punto de entrada FastAPI — monta rutas base
-  api/
-    router.py    # Enroutador raíz — aquí se agregan routers por feature
-  core/
-    config.py    # Carga de variables de entorno y settings generales
-  common/
-    __init__.py  # (Opcional) Utilidades compartidas (responses, exceptions, etc.)
-  parsing/       # (Placeholder) Aquí irá la gramática Lark y su parser
-  analysis/      # (Placeholder) Aquí irá el motor de análisis de complejidad
-  storage/       # (Placeholder) Repositorios (memoria/Supabase)
-  exporters/     # (Placeholder) Reportes/diagramas (si se usan)
+```bash
+setx PYTHONPATH "."
+# Cierra y vuelve a abrir la terminal para aplicar el cambio
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## 5) Flujo colaborativo sugerido (Git)
-- Rama por feature: `feat/grammar-lark`, `feat/analysis-estimator`, etc.
-- Commits pequeños y descriptivos (usa `ruff/black/isort/mypy` antes de PR).
-- Pull Request con revisión entre pares.
-- Merge a `main` solo mediante PR.
+El servidor quedará corriendo en:
 
-## 6) Siguientes pasos (cuando empieces la lógica)
-- Define tu gramática en `app/parsing/grammar/` y el parser con Lark.
-- Implementa el AST y el estimador en `app/analysis/`.
-- Crea routers por feature en `app/api/` y conéctalos desde `app/api/router.py`.
-- Si vas a usar Supabase, crea un cliente en `app/core/` y repos en `app/storage/`.
+- **Swagger UI:** http://127.0.0.1:8000/docs
+- **ReDoc:** http://127.0.0.1:8000/redoc
+
+---
+
+## 🧩 4) Estructura del proyecto
+
+```
+algorithm-analysis/
+│
+├── app/
+│   ├── main.py          # Punto de entrada de FastAPI (crea instancia y monta rutas)
+│   ├── api/
+│   │   └── router.py    # Router raíz (se importan las rutas por módulo)
+│   ├── core/
+│   │   └── config.py    # Configuración y carga de variables de entorno
+│   ├── common/          # Utilidades compartidas (respuestas, excepciones, middlewares)
+│   ├── parsing/         # (Placeholder) Gramáticas Lark y parser de entrada
+│   ├── analysis/        # (Placeholder) Motor de análisis de complejidad
+│   ├── storage/         # (Placeholder) Repositorios (memoria o Supabase)
+│   └── exporters/       # (Placeholder) Reportes, gráficas o diagramas
+│
+├── .env.example          # Variables de entorno base
+├── requirements.txt      # Dependencias del proyecto
+├── README.md             # Este archivo
+└── .gitignore
 ```
 
+---
+
+## 🤝 5) Flujo de trabajo colaborativo (Git)
+
+- Crea una rama por feature:  
+  `feat/parser-lark`, `feat/complexity-engine`, `fix/config-loader`, etc.
+- Usa commits pequeños y descriptivos.
+- Aplica linters y formateadores antes de hacer push (`ruff`, `black`, `isort`, `mypy`).
+- Haz _Pull Requests_ para revisión por pares.
+- Solo mergea a `main` mediante PR aprobado.
+
+---
+
+## 🧠 6) Siguientes pasos (cuando comiences desarrollo)
+
+1. **Definir gramática:**  
+   Crea la gramática Lark en `app/parsing/grammar/`.
+2. **Implementar parser:**  
+   Desarrolla el parser sintáctico/semántico en `app/parsing/`.
+3. **Diseñar analizador:**  
+   Construye el estimador de complejidad en `app/analysis/`.
+4. **Exponer endpoints:**  
+   Define rutas específicas dentro de `app/api/` y conéctalas en `router.py`.
+5. **Persistencia opcional:**  
+   Si usas Supabase, configura conexión y repos en `app/storage/`.
+6. **Visualización:**  
+   Agrega reportes o diagramas en `app/exporters/`.
+
+---
+
+## 🧪 7) Pruebas rápidas
+
+Para probar el servidor:
+
+```bash
+curl http://127.0.0.1:8000/api/test
+```
+
+Si devuelve `{"ok": true}`, el backend está funcionando correctamente.
+
+---
+
+## 🧰 8) Herramientas útiles
+
+| Propósito       | Herramienta | Comando                         |
+| --------------- | ----------- | ------------------------------- |
+| Linter          | ruff        | `ruff check .`                  |
+| Formato         | black       | `black .`                       |
+| Orden imports   | isort       | `isort .`                       |
+| Tipos estáticos | mypy        | `mypy app/`                     |
+| Servidor local  | uvicorn     | `uvicorn app.main:app --reload` |
