@@ -1,15 +1,27 @@
-# Este archivo es el punto de entrada de FastAPI.
-# Su responsabilidad es crear la instancia de la aplicación y montar las rutas base.
+"""
+Punto de entrada principal de la aplicación FastAPI.
+
+Responsabilidades:
+- Crear la instancia global de FastAPI.
+- Montar el router base de la API.
+- Permitir que Uvicorn levante la aplicación (app:module).
+"""
 
 from fastapi import FastAPI
 from app.api.router import api_router
 
+
 def create_app() -> FastAPI:
-    # Crea la aplicación principal. Aquí puedes añadir middlewares, eventos, etc.
+    """
+    Crea y configura la instancia principal de FastAPI.
+
+    Returns:
+        FastAPI: Objeto de aplicación configurado con sus rutas y metadatos.
+    """
     app = FastAPI(title="Analizador de Algoritmos (Base mínima)")
-    # Monta el router raíz de la API bajo /api
     app.include_router(api_router, prefix="/api")
     return app
 
-# Instancia global que uvicorn utiliza para levantar el servidor (app:module)
+
+# Instancia global que Uvicorn utiliza para ejecutar el servidor (app:module)
 app = create_app()

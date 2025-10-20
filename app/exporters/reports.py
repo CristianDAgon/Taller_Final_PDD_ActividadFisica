@@ -11,7 +11,7 @@ def build_html_report(pseudocode: str, result: Dict[str, Any]):
     <pre>{pseudocode}</pre>
     <h2>Resultados</h2>
     <pre>{result}</pre>
-    </body></html>
+    </body></html>b
     """
     out.write_text(html, encoding='utf-8')
     return type("Report", (), {"path": str(out)})

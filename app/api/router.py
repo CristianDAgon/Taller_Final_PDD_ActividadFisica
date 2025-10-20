@@ -1,15 +1,30 @@
-# Este enroutador 'api_router' sirve como punto central para agregar routers por feature.
-# Por ahora, solo incluye una ruta de salud ('/health') para verificar que el servidor corre.
+"""
+Router raíz de la API.
+
+Punto central para agregar routers por feature.
+"""
 
 from fastapi import APIRouter
+from app.api.analyzer.router import router as analyzer_router
+
+__all__ = ["api_router"]
 
 api_router = APIRouter()
 
-@api_router.get("/health")
-def health_check():
+# Registrar routers por dominio/feature
+api_router.include_router(
+    analyzer_router,
+    prefix="/analyzer",
+    tags=["analyzer"],
+)
+
+
+@api_router.get("/")
+def test_check() -> dict[str, str]:
     """
     Endpoint mínimo para verificar que la API está levantada.
-    - Responde con un objeto JSON simple.
-    - Útil para pruebas de despliegue e integración continua.
+
+    Returns:
+        dict[str, str]: Objeto JSON simple con la clave "status".
     """
     return {"status": "ok"}
