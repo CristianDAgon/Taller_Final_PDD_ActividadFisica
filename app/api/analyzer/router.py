@@ -18,6 +18,7 @@ from app.api.analyzer.schemas import AstRequest, AstResponse
 from app.parsing.parser import PseudocodeParser
 from app.parsing.transformer import PseudocodeTransformer
 from app.parsing.serializer import ast_to_dict
+from app.analysis.classifier import AlgorithmClassifier
 
 router = APIRouter()
 
@@ -83,8 +84,15 @@ def build_ast(req: AstRequest) -> AstResponse:
         transformer = PseudocodeTransformer()
         ast_obj = transformer.transform(lark_tree)
 
+        classifier = AlgorithmClassifier(ast_obj)
+        classification = classifier.classify_all()
+
         ast_json = ast_to_dict(ast_obj)
         pretty = lark_tree.pretty()
-        return AstResponse(ast=ast_json, pretty=pretty)
+        return AstResponse(
+            ast=ast_json, 
+            pretty=pretty,
+            classification=classification
+        )
     except Exception as exc:
         raise HTTPException(status_code=400, detail=f"Error construyendo AST: {exc}") from exc
