@@ -1,6 +1,7 @@
 // ============================================================================
 // GRAMÁTICA LARK PARA ANALIZADOR DE COMPLEJIDADES
 // Basada en sintaxis tipo Pascal con extensiones para objetos y grafos
+// VERSIÓN CORREGIDA: Declaraciones como statements
 // ============================================================================
 
 // ============================================================================
@@ -25,18 +26,9 @@ attribute_list: CNAME+
 
 algorithm: subroutine_definition* main_algorithm
 
-main_algorithm: "begin" local_declarations? statement* "end"
+main_algorithm: "begin" statement* "end"
 
-subroutine_definition: CNAME "(" parameter_list? ")" "begin" local_declarations? statement* "end"
-
-// ============================================================================
-// DECLARACIONES LOCALES (vectores al inicio del algoritmo)
-// ============================================================================
-
-local_declarations: local_declaration+
-
-local_declaration: CNAME "[" expression "]"
-                 | CNAME CNAME
+subroutine_definition: CNAME "(" parameter_list? ")" "begin" statement* "end"
 
 // ============================================================================
 // PARÁMETROS DE SUBRUTINAS
@@ -58,7 +50,8 @@ simple_parameter: CNAME
 // SENTENCIAS
 // ============================================================================
 
-statement: assignment ";"?
+statement: declaration ";"?
+         | assignment ";"?
          | for_loop
          | while_loop
          | repeat_loop
@@ -66,6 +59,17 @@ statement: assignment ";"?
          | call_statement ";"?
          | return_statement ";"?
          | comment
+
+// ----------------------------------------------------------------------------
+// DECLARACIONES (puede estar en cualquier parte del código)
+// ----------------------------------------------------------------------------
+
+declaration: array_declaration
+           | object_declaration
+
+array_declaration: CNAME "[" expression "]"
+
+object_declaration: CNAME CNAME
 
 // ----------------------------------------------------------------------------
 // ASIGNACIÓN
