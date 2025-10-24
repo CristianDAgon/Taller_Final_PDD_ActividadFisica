@@ -32,3 +32,4 @@ class AstResponse(BaseModel):
 
     ast: Dict[str, Any]
     pretty: Optional[str] = None
+    classification: dict
